@@ -623,10 +623,18 @@ footer::before {
   <span class="music-label">Lagu Acara – Grand Opening UMKM PBB Dairi</span>
   <button class="music-btn" id="playBtn" onclick="togglePlay()">▶</button>
   <input type="range" id="vol" min="0" max="1" step="0.05" value="0.6" oninput="setVol(this.value)">
-  <audio id="bgMusic" loop>
-    <source src="musik.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bgMusic" autoplay loop>
+  <source src="musik.mp3" type="audio/mpeg">
+</audio>
 </div>
+<script>
+document.addEventListener("click", function startMusic() {
+    const music = document.getElementById("bgMusic");
+
+    music.play();
+    document.removeEventListener("click", startMusic);
+});
+</script>
 
 <!-- HERO -->
 <section class="hero">
@@ -834,6 +842,19 @@ function togglePlay() {
   else              { audio.pause(); btn.textContent = '▶'; }
 }
 function setVol(v) { audio.volume = v; }
+
+window.addEventListener('load', () => {
+  const music = document.getElementById('bgMusic');
+  const playBtn = document.getElementById('playBtn');
+
+  music.volume = 0.6;
+
+  music.play().then(() => {
+    playBtn.textContent = '⏸';
+  }).catch(err => {
+    console.log('Autoplay diblokir browser:', err);
+  });
+});
 
 // Autoplay attempt
 audio.play().then(()=>{ btn.textContent='⏸'; }).catch(()=>{});
